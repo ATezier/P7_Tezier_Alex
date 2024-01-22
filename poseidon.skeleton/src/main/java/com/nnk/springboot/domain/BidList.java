@@ -1,8 +1,6 @@
 package com.nnk.springboot.domain;
 
-
 import jakarta.persistence.*;
-
 import java.sql.Timestamp;
 
 @Entity
