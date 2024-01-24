@@ -7,7 +7,6 @@ import jakarta.validation.constraints.NotBlank;
 @Table(name = "users")
 public class User {
     @Id
-    @Column(name = "id")
     @GeneratedValue(strategy= GenerationType.AUTO)
     private Integer id;
     @Column(name = "username")
@@ -62,4 +61,5 @@ public class User {
     public void setRole(String role) {
         this.role = role;
     }
+
 }
