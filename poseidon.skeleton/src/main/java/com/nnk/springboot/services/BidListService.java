@@ -23,7 +23,14 @@ public class BidListService {
         return bidListRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid bidList Id:" + id));
     }
 
-    public void delete(BidList bidList) { bidListRepository.delete(bidList); }
+    public void deleteById(Integer id) {
+        try {
+            BidList bidList = this.findById(id);
+            bidListRepository.delete(bidList);
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException("Invalid Id");
+        }
+    }
 
     public boolean valid(BidList bidList) {
         boolean isValid = true;

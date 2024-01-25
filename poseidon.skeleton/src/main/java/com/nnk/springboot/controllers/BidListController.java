@@ -72,8 +72,7 @@ public class BidListController {
     @GetMapping("/bidList/delete/{id}")
     public String deleteBid(@PathVariable("id") Integer id, Model model, BindingResult result) {
         try {
-            BidList bidList = bidListService.findById(id);
-            bidListService.delete(bidList);
+            bidListService.deleteById(id);
             model.addAttribute("bidList", bidListService.findAll());
         } catch (IllegalArgumentException e) {
             result.rejectValue("id", "bidList.id", e.getMessage());
