@@ -1,10 +1,13 @@
 package com.nnk.springboot.domain;
 
 import jakarta.persistence.*;
+import lombok.NoArgsConstructor;
+
 import java.sql.Timestamp;
 
 @Entity
 @Table(name = "curvepoint")
+@NoArgsConstructor
 public class CurvePoint {
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
@@ -22,8 +25,10 @@ public class CurvePoint {
 
     public CurvePoint(Integer id, Double term, Double value) {
         this.id = id;
+        this.asOfDate = null;
         this.term = term;
         this.value = value;
+        this.creationDate = null;
     }
 
     public Integer getId() {

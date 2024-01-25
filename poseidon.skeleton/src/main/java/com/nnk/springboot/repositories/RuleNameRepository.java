@@ -12,5 +12,4 @@ public interface RuleNameRepository extends JpaRepository<RuleName, Integer> {
     RuleName save(RuleName ruleName);
     Optional<RuleName> findById(Integer id);
     void delete(RuleName ruleName);
-    boolean updateById(Integer id, RuleName ruleName);
 }

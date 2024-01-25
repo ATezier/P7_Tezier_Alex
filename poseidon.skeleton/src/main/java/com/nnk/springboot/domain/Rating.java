@@ -1,8 +1,11 @@
 package com.nnk.springboot.domain;
 
 import jakarta.persistence.*;
+import lombok.NoArgsConstructor;
+
 @Entity
 @Table(name = "rating")
+@NoArgsConstructor
 public class Rating {
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)

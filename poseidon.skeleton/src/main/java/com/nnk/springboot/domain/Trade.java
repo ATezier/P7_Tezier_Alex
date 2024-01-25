@@ -1,11 +1,14 @@
 package com.nnk.springboot.domain;
 
 import jakarta.persistence.*;
+import lombok.NoArgsConstructor;
+
 import java.sql.Timestamp;
 
 
 @Entity
 @Table(name = "trade")
+@NoArgsConstructor
 public class Trade {
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
@@ -54,6 +57,24 @@ public class Trade {
     public Trade(String account, String type) {
         this.account = account;
         this.type = type;
+        this.buyQuantity = 0.0;
+        this.sellQuantity = 0.0;
+        this.buyPrice = 0.0;
+        this.sellPrice = 0.0;
+        this.tradeDate = null;
+        this.security = null;
+        this.status = null;
+        this.trader = null;
+        this.benchmark = null;
+        this.book = null;
+        this.creationName = null;
+        this.creationDate = null;
+        this.revisionName = null;
+        this.revisionDate = null;
+        this.dealName = null;
+        this.dealType = null;
+        this.sourceListId = null;
+        this.side = null;
     }
     public Integer getTradeId() {
         return tradeId;

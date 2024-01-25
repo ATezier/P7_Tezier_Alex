@@ -8,10 +8,10 @@ import java.util.List;
 
 
 public interface BidListRepository extends JpaRepository<BidList, Integer> {
-    List<BidList> findAll();
-    BidList save(BidList bidList);
-    BidList findByBidListId(@NonNull Integer bidListId);
-    void delete(BidList bidList);
-    boolean updateByBidListId(@NonNull Integer bidListId, BidList bidList);
+    public List<BidList> findAll();
+    public BidList save(BidList bidList);
+    public BidList findByBidListId(@NonNull Integer bidListId);
+    public void delete(BidList bidList);
 
+    public BidList findByAccountAndDealTypeAndBidQuantity(@NonNull String account, @NonNull String dealType, @NonNull Double bidQuantity);
 }

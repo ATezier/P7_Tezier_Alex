@@ -11,5 +11,4 @@ public interface RatingRepository extends JpaRepository<Rating, Integer> {
     Rating save(Rating rating);
     Optional<Rating> findById(Integer id);
     void delete(Rating rating);
-    boolean updateById(Integer id, Rating rating);
 }

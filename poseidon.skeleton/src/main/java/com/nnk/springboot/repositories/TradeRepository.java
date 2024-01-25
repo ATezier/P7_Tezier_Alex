@@ -12,5 +12,4 @@ public interface TradeRepository extends JpaRepository<Trade, Integer> {
     Trade save(Trade trade);
     Optional<Trade> findById(Integer id);
     void delete(Trade trade);
-    boolean updateById(Integer id, Trade trade);
 }

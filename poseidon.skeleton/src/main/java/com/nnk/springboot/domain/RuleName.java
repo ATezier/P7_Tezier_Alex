@@ -1,9 +1,11 @@
 package com.nnk.springboot.domain;
 
 import jakarta.persistence.*;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "rulename")
+@NoArgsConstructor
 public class RuleName {
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)

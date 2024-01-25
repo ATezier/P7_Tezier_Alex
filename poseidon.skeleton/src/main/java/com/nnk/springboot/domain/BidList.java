@@ -1,11 +1,13 @@
 package com.nnk.springboot.domain;
 
 import jakarta.persistence.*;
+import lombok.NoArgsConstructor;
+
 import java.sql.Timestamp;
 
 @Entity
 @Table(name = "bidlist")
-
+@NoArgsConstructor
 public class BidList {
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
@@ -53,8 +55,25 @@ public class BidList {
 
     public BidList(String account, String dealType, Double bidQuantity) {
         this.account = account;
-        this.dealType = dealType;
         this.bidQuantity = bidQuantity;
+        this.bid = 0.0;
+        this.askQuantity = 0.0;
+        this.ask = 0.0;
+        this.benchmark = null;
+        this.bidListDate = null;
+        this.commentary = null;
+        this.security = null;
+        this.status = null;
+        this.trader = null;
+        this.book = null;
+        this.creationName = null;
+        this.creationDate = null;
+        this.revisionName = null;
+        this.revisionDate = null;
+        this.dealName = null;
+        this.dealType = dealType;
+        this.sourceListId = null;
+        this.side = null;
     }
 
     public Integer getBidListId() {

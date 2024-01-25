@@ -12,6 +12,5 @@ public interface CurvePointRepository extends JpaRepository<CurvePoint, Integer>
     CurvePoint save(CurvePoint curvePoint);
     Optional<CurvePoint> findById(Integer id);
     void delete(CurvePoint curvePoint);
-    boolean updateById(Integer id, CurvePoint curvePoint);
 
 }
