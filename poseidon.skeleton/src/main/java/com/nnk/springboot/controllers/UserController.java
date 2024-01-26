@@ -72,8 +72,7 @@ public class UserController {
     @GetMapping("/user/delete/{id}")
     public String deleteUser(@PathVariable("id") Integer id, Model model) {
         try {
-            User user = userService.findById(id);
-            userService.delete(user);
+            userService.deleteById(id);
         } catch (Exception e) {
             throw new IllegalArgumentException("Invalid user Id:" + id);
         }

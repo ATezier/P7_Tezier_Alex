@@ -15,5 +15,12 @@ public class UserService {
     public List<User> findAll() {return userRepository.findAll();}
     public User save(User user) {return userRepository.save(user);}
     public User findById(Integer id) {return userRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid user Id:" + id));}
-    public void delete(User user) {userRepository.delete(user);}
+    public void deleteById(Integer id) {
+        try {
+            User user = this.findById(id);
+            userRepository.delete(user);
+        } catch (Exception e) {
+            throw new IllegalArgumentException("Invalid user Id:" + id);
+        }
+    }
 }
