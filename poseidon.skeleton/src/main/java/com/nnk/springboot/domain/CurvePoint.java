@@ -23,8 +23,8 @@ public class CurvePoint {
     @Column(name = "creationDate")
     Timestamp creationDate;
 
-    public CurvePoint(Integer id, Double term, Double value) {
-        this.id = id;
+    public CurvePoint(Integer curveId, Double term, Double value) {
+        this.curveId = curveId;
         this.asOfDate = null;
         this.term = term;
         this.value = value;

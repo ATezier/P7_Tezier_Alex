@@ -14,6 +14,8 @@ public class BidList {
     Integer bidListId;
     @Column(name = "account")
     String account;
+    @Column(name = "type")
+    String type;
     @Column(name = "bidQuantity")
     Double bidQuantity;
     @Column(name = "bid")
@@ -53,8 +55,9 @@ public class BidList {
     @Column(name = "side")
     String side;
 
-    public BidList(String account, String dealType, Double bidQuantity) {
+    public BidList(String account, String type, Double bidQuantity) {
         this.account = account;
+        this.type = type;
         this.bidQuantity = bidQuantity;
         this.bid = 0.0;
         this.askQuantity = 0.0;
@@ -71,7 +74,7 @@ public class BidList {
         this.revisionName = null;
         this.revisionDate = null;
         this.dealName = null;
-        this.dealType = dealType;
+        this.dealType = null;
         this.sourceListId = null;
         this.side = null;
     }
