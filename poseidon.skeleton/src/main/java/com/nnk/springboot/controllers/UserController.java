@@ -1,5 +1,6 @@
 package com.nnk.springboot.controllers;
 
+import com.nnk.springboot.config.SpringSecurityConfig;
 import com.nnk.springboot.domain.User;
 import com.nnk.springboot.services.UserService;
 import jakarta.validation.Valid;
@@ -17,6 +18,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class UserController {
     @Autowired
     private UserService userService;
+    @Autowired
+    SpringSecurityConfig securityConfig;
+
+    @RequestMapping("/user")
+    public String user() { return "Welcome user"; }
 
     @RequestMapping("/user/list")
     public String home(Model model)
@@ -33,7 +39,7 @@ public class UserController {
     @PostMapping("/user/validate")
     public String validate(@Valid User user, BindingResult result, Model model) {
         if (!result.hasErrors()) {
-            BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+            BCryptPasswordEncoder encoder = securityConfig.passwordEncoder();
             user.setPassword(encoder.encode(user.getPassword()));
             userService.save(user);
             model.addAttribute("users", userService.findAll());
@@ -61,7 +67,7 @@ public class UserController {
             return "user/update";
         }
 
-        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        BCryptPasswordEncoder encoder = securityConfig.passwordEncoder();
         user.setPassword(encoder.encode(user.getPassword()));
         user.setId(id);
         userService.save(user);
