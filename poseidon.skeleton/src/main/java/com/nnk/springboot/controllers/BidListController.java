@@ -36,7 +36,7 @@ public class BidListController {
             if (result.hasErrors()) {
                 return "bidList/add";
             }
-            bidListService.addBidList(bid);
+            bidListService.create(bid);
             model.addAttribute("bidList", bidListService.findAll());
         } catch (IllegalArgumentException e) {
             result.rejectValue("id", "bidList.id", e.getMessage());

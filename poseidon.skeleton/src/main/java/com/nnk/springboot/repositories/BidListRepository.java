@@ -13,5 +13,5 @@ public interface BidListRepository extends JpaRepository<BidList, Integer> {
     public BidList findByBidListId(@NonNull Integer bidListId);
     public void delete(BidList bidList);
 
-    public BidList findByAccountAndDealTypeAndBidQuantity(@NonNull String account, @NonNull String dealType, @NonNull Double bidQuantity);
+    public BidList findByAccountAndTypeAndBidQuantity(@NonNull String account, @NonNull String type, @NonNull Double bidQuantity);
 }

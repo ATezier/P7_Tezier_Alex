@@ -68,7 +68,7 @@ public class TradeService {
                 tradeToUpdate.setSide(trade.getSide());
                 tradeRepository.save(tradeToUpdate);
             } catch (Exception e) {
-                throw new IllegalArgumentException("Invalid id :" + id);
+                throw new IllegalArgumentException("Trade doesn't exist");
             }
         } else {
             throw new IllegalArgumentException("Invalid trade");

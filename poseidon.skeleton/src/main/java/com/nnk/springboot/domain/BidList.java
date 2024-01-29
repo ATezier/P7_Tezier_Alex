@@ -95,6 +95,10 @@ public class BidList {
         this.account = account;
     }
 
+    public String getType() { return type; }
+
+    public void setType(String type) { this.type = type; }
+
     public Double getBidQuantity() {
         return bidQuantity;
     }

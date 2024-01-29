@@ -59,14 +59,18 @@ public class RuleNameService {
 
     public void update(Integer id, RuleName ruleName) {
         if (this.valid(ruleName)) {
-            RuleName ruleNameToUpdate = this.findById(id);
-            ruleNameToUpdate.setName(ruleName.getName());
-            ruleNameToUpdate.setDescription(ruleName.getDescription());
-            ruleNameToUpdate.setJson(ruleName.getJson());
-            ruleNameToUpdate.setTemplate(ruleName.getTemplate());
-            ruleNameToUpdate.setSqlStr(ruleName.getSqlStr());
-            ruleNameToUpdate.setSqlPart(ruleName.getSqlPart());
-            ruleNameRepository.save(ruleNameToUpdate);
+            try {
+                RuleName ruleNameToUpdate = this.findById(id);
+                ruleNameToUpdate.setName(ruleName.getName());
+                ruleNameToUpdate.setDescription(ruleName.getDescription());
+                ruleNameToUpdate.setJson(ruleName.getJson());
+                ruleNameToUpdate.setTemplate(ruleName.getTemplate());
+                ruleNameToUpdate.setSqlStr(ruleName.getSqlStr());
+                ruleNameToUpdate.setSqlPart(ruleName.getSqlPart());
+                ruleNameRepository.save(ruleNameToUpdate);
+            } catch (Exception e) {
+                throw new IllegalArgumentException("Rule name doesn't exist");
+            }
         } else {
             throw new IllegalArgumentException("Invalid rule name");
         }
