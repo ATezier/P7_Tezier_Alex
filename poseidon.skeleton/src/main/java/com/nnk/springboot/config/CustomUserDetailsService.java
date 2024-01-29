@@ -29,11 +29,12 @@ public class CustomUserDetailsService implements UserDetailsService {
         if(role.contains(",")) {
             String[] roles = role.split(",");
             for (String _role : roles) {
-                authorities.add(new SimpleGrantedAuthority("Role_" + _role));
+                authorities.add(new SimpleGrantedAuthority("ROLE_" + _role));
             }
         } else {
-            authorities.add(new SimpleGrantedAuthority("Role_" + role));
+            authorities.add(new SimpleGrantedAuthority("ROLE_" + role));
         }
+        System.out.println(authorities);
         return authorities;
     }
 }

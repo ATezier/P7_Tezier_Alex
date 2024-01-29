@@ -64,13 +64,20 @@ public class RuleNameService {
         if (this.valid(ruleName)) {
             try {
                 RuleName ruleNameToUpdate = this.findById(id);
-                ruleNameToUpdate.setName(ruleName.getName());
-                ruleNameToUpdate.setDescription(ruleName.getDescription());
-                ruleNameToUpdate.setJson(ruleName.getJson());
-                ruleNameToUpdate.setTemplate(ruleName.getTemplate());
-                ruleNameToUpdate.setSqlStr(ruleName.getSqlStr());
-                ruleNameToUpdate.setSqlPart(ruleName.getSqlPart());
-                res = ruleNameRepository.save(ruleNameToUpdate);
+                if(ruleNameToUpdate.getJson() == ruleName.getJson()
+                        && ruleNameToUpdate.getTemplate() == ruleName.getTemplate()
+                        && ruleNameToUpdate.getSqlStr() == ruleName.getSqlStr()
+                        && ruleNameToUpdate.getSqlPart() == ruleName.getSqlPart()) {
+                    throw new IllegalArgumentException("Rule name already exists");
+                } else {
+                    ruleNameToUpdate.setName(ruleName.getName());
+                    ruleNameToUpdate.setDescription(ruleName.getDescription());
+                    ruleNameToUpdate.setJson(ruleName.getJson());
+                    ruleNameToUpdate.setTemplate(ruleName.getTemplate());
+                    ruleNameToUpdate.setSqlStr(ruleName.getSqlStr());
+                    ruleNameToUpdate.setSqlPart(ruleName.getSqlPart());
+                    res = ruleNameRepository.save(ruleNameToUpdate);
+                }
             } catch (Exception e) {
                 throw new IllegalArgumentException("Rule name doesn't exist");
             }

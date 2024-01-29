@@ -70,7 +70,7 @@ public class UserController {
     public String updateUser(@PathVariable("id") Integer id, @Valid User user,
                              BindingResult result, Model model) {
         if (result.hasErrors()) {
-            return "user/update";
+            return "redirect:/user/update/"+id;
         }
         try {
             userService.passwordValid(user.getPassword());
@@ -80,7 +80,7 @@ public class UserController {
             userService.update(id, user);
         } catch (Exception e) {
             result.rejectValue("password", "user.password", e.getMessage());
-            return "user/update/";
+            return "redirect:/user/update/"+id;
         }
         model.addAttribute("users", userService.findAll());
         return "redirect:/user/list";

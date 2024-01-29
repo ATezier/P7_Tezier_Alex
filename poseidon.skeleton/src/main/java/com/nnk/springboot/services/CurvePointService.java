@@ -60,7 +60,9 @@ public class CurvePointService {
                         && curvePoint.getValue() == curvePointToUpdate.getValue()) {
                     throw new IllegalArgumentException("CurvePoint already up to date");
                 } else {
-                    curvePointToUpdate.setAsOfDate(curvePoint.getAsOfDate());
+                    curvePointToUpdate.setCurveId(curvePoint.getCurveId());
+                    curvePointToUpdate.setTerm(curvePoint.getTerm());
+                    curvePointToUpdate.setValue(curvePoint.getValue());
                     res = curvePointRepository.save(curvePointToUpdate);
                 }
             } catch (IllegalArgumentException e) {
