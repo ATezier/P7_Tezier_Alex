@@ -37,15 +37,18 @@ public class RatingService {
 
     public List<Rating> findAll() { return ratingRepository.findAll(); }
 
-    public void add(Rating rating) {
+    public Rating create(Rating rating) {
+        Rating res = null;
         if (valid(rating)) {
-            ratingRepository.save(rating);
+            res = ratingRepository.save(rating);
         } else {
             throw new IllegalArgumentException("Invalid rating");
         }
+        return res;
     }
 
-    public void update(Integer id, Rating rating) {
+    public Rating update(Integer id, Rating rating) {
+        Rating res = null;
         if (valid(rating)) {
             try {
                 Rating ratingToUpdate = this.findById(id);
@@ -53,13 +56,14 @@ public class RatingService {
                 ratingToUpdate.setSandPRating(rating.getSandPRating());
                 ratingToUpdate.setFitchRating(rating.getFitchRating());
                 ratingToUpdate.setOrderNumber(rating.getOrderNumber());
-                ratingRepository.save(ratingToUpdate);
+                res = ratingRepository.save(ratingToUpdate);
             } catch (Exception e) {
                 throw new IllegalArgumentException("Invalid rating Id:" + id);
             }
         } else {
             throw new IllegalArgumentException("Invalid rating");
         }
+        return res;
     }
 
     public void deleteById(Integer id) {

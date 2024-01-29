@@ -33,7 +33,7 @@ public class TradeController {
     public String validate(@Valid Trade trade, BindingResult result, Model model) {
         try {
             if (!result.hasErrors()) {
-                tradeService.add(trade);
+                tradeService.create(trade);
                 return "redirect:/trade/list";
             }
         } catch (Exception e) {

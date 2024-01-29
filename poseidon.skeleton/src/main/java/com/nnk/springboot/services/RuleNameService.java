@@ -45,19 +45,22 @@ public class RuleNameService {
         return ruleNameRepository.findById(id).orElseThrow( () -> new IllegalArgumentException("Invalid rule name Id:" + id) );
     }
 
-    public void add(RuleName ruleName) {
+    public RuleName create(RuleName ruleName) {
+        RuleName res = null;
         if (this.valid(ruleName)) {
             if(ruleNameRepository.findByNameAndJsonAndTemplateAndSqlStrAndSqlPart(ruleName.getName(), ruleName.getJson(), ruleName.getTemplate(), ruleName.getSqlStr(), ruleName.getSqlPart()) == null) {
-                ruleNameRepository.save(ruleName);
+                res = ruleNameRepository.save(ruleName);
             } else {
                 throw new IllegalArgumentException("Rule name already exists");
             }
         } else {
             throw new IllegalArgumentException("Invalid rule name");
         }
+        return res;
     }
 
-    public void update(Integer id, RuleName ruleName) {
+    public RuleName update(Integer id, RuleName ruleName) {
+        RuleName res = null;
         if (this.valid(ruleName)) {
             try {
                 RuleName ruleNameToUpdate = this.findById(id);
@@ -67,13 +70,14 @@ public class RuleNameService {
                 ruleNameToUpdate.setTemplate(ruleName.getTemplate());
                 ruleNameToUpdate.setSqlStr(ruleName.getSqlStr());
                 ruleNameToUpdate.setSqlPart(ruleName.getSqlPart());
-                ruleNameRepository.save(ruleNameToUpdate);
+                res = ruleNameRepository.save(ruleNameToUpdate);
             } catch (Exception e) {
                 throw new IllegalArgumentException("Rule name doesn't exist");
             }
         } else {
             throw new IllegalArgumentException("Invalid rule name");
         }
+        return res;
     }
 
     public void deleteById(Integer id) {

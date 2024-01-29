@@ -35,20 +35,23 @@ public class CurvePointService {
         return curvePointRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid curvePoint Id:" + id));
     }
 
-    public void add(CurvePoint curvePoint) {
+    public CurvePoint create(CurvePoint curvePoint) {
+        CurvePoint res = null;
         if (valid(curvePoint)) {
             if(curvePointRepository.findByCurveIdAndTermAndValue(curvePoint.getCurveId(), curvePoint.getTerm(), curvePoint.getValue()) == null) {
                 curvePoint.setCreationDate(new Timestamp(System.currentTimeMillis()));
-                curvePointRepository.save(curvePoint);
+                res = curvePointRepository.save(curvePoint);
             } else {
                 throw new IllegalArgumentException("CurvePoint already exists");
             }
         } else {
             throw new IllegalArgumentException("Invalid CurvePoint");
         }
+        return res;
     }
 
-    public void update(Integer id, CurvePoint curvePoint) {
+    public CurvePoint update(Integer id, CurvePoint curvePoint) {
+        CurvePoint res = null;
         if (valid(curvePoint)) {
             try {
                 CurvePoint curvePointToUpdate = this.findById(id);
@@ -58,7 +61,7 @@ public class CurvePointService {
                     throw new IllegalArgumentException("CurvePoint already up to date");
                 } else {
                     curvePointToUpdate.setAsOfDate(curvePoint.getAsOfDate());
-                    curvePointRepository.save(curvePointToUpdate);
+                    res = curvePointRepository.save(curvePointToUpdate);
                 }
             } catch (IllegalArgumentException e) {
                 throw new IllegalArgumentException("Invalid Id");
@@ -66,6 +69,7 @@ public class CurvePointService {
         } else {
             throw new IllegalArgumentException("Invalid CurvePoint");
         }
+        return res;
     }
 
     public void deleteById(Integer id) {

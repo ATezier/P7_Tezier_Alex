@@ -11,8 +11,11 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
+import static org.mockito.BDDMockito.given;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
@@ -24,32 +27,33 @@ public class UserTests {
 
     @Test
     public void UserTest() {
-        User user = new User();
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-        user.setUsername("test");
-        user.setPassword(encoder.encode("password"));
-        user.setRole("USER");
-        user.setFullname("Mr. Test");
+        User user = new User("test", encoder.encode("password"), "Mr. Test", "USER");
+        Integer id = 1;
+        user.setId(id);
+        List<User> users = new ArrayList<User>();
+        users.add(user);
 
-        // Save
-        user = userRepository.save(user);
-        Assertions.assertNotNull(user.getId());
-        Assertions.assertEquals("test", user.getUsername());
+        // Valid
+        Assertions.assertTrue(userService.valid(user));
+
+        // Create
+        given(userRepository.save(user)).willReturn(user);
+        Assertions.assertNotNull(userService.create(user));
+
+        // Read
+        given(userRepository.findAll()).willReturn(users);
+        Assertions.assertTrue(userService.findAll().size() > 0);
+
+        given(userRepository.findById(id)).willReturn(Optional.of(user));
+        Assertions.assertNotNull(userService.findById(id));
 
 
         // Update
-        user.setFullname("Ms. Test");
-        user = userRepository.save(user);
-        Assertions.assertEquals("Ms. Test", user.getFullname());
-
-        // Find
-        List<User> listResult = userRepository.findAll();
-        Assertions.assertTrue(listResult.size() > 0);
+        Assertions.assertNotNull(userService.update(id, new User(
+            user.getUsername(), user.getPassword(), user.getFullname(), user.getRole())));
 
         // Delete
-        Integer id = user.getId();
-        userRepository.deleteById(id);
-        Optional<User> _user = userRepository.findById(id);
-        Assertions.assertFalse(_user.isPresent());
+        Assertions.assertDoesNotThrow( () -> userService.deleteById(id));
     }
 }

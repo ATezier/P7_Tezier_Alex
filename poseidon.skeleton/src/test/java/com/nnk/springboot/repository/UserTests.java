@@ -21,12 +21,8 @@ public class UserTests {
 
     @Test
     public void UserTest() {
-        User user = new User();
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-        user.setUsername("test");
-        user.setPassword(encoder.encode("password"));
-        user.setRole("USER");
-        user.setFullname("Mr. Test");
+        User user = new User("test", encoder.encode("password"), "Mr. Test", "USER");
 
         // Save
         user = userRepository.save(user);

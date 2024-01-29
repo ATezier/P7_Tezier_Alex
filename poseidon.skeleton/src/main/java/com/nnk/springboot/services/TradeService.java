@@ -34,15 +34,18 @@ public class TradeService {
         return isValid;
     }
 
-    public void add(Trade trade) {
+    public Trade create(Trade trade) {
+        Trade res = null;
         if (valid(trade)) {
-            tradeRepository.save(trade);
+            res = tradeRepository.save(trade);
         } else {
             throw new IllegalArgumentException("Invalid trade");
         }
+        return res;
     }
 
-    public void update(Integer id, Trade trade) {
+    public Trade update(Integer id, Trade trade) {
+        Trade res = null;
         if(valid(trade)) {
             try {
                 Trade tradeToUpdate = this.findById(id);
@@ -66,13 +69,14 @@ public class TradeService {
                 tradeToUpdate.setDealType(trade.getDealType());
                 tradeToUpdate.setSourceListId(trade.getSourceListId());
                 tradeToUpdate.setSide(trade.getSide());
-                tradeRepository.save(tradeToUpdate);
+                res = tradeRepository.save(tradeToUpdate);
             } catch (Exception e) {
                 throw new IllegalArgumentException("Trade doesn't exist");
             }
         } else {
             throw new IllegalArgumentException("Invalid trade");
         }
+        return res;
     }
 
     public void deleteById(Integer id) {

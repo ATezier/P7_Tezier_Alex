@@ -33,7 +33,7 @@ public class RatingController {
     public String validate(@Valid Rating rating, BindingResult result, Model model) {
         try {
             if (!result.hasErrors()) {
-                ratingService.add(rating);
+                ratingService.create(rating);
                 return "redirect:/rating/list";
             }
         } catch (Exception e) {

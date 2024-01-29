@@ -33,7 +33,7 @@ public class RuleNameController {
     public String validate(@Valid RuleName ruleName, BindingResult result, Model model) {
         try {
             if (!result.hasErrors()) {
-                ruleNameService.add(ruleName);
+                ruleNameService.create(ruleName);
                 return "redirect:/ruleName/list";
             }
         } catch (Exception e) {

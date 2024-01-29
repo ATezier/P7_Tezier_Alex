@@ -4,7 +4,6 @@ import com.nnk.springboot.domain.BidList;
 import com.nnk.springboot.repositories.BidListRepository;
 import org.springframework.stereotype.Service;
 
-import java.sql.Timestamp;
 import java.util.List;
 
 @Service
@@ -49,12 +48,7 @@ public class BidListService {
     public BidList create(BidList bidList) {
         BidList res = null;
         if (valid(bidList)) {
-            if (bidListRepository.findByAccountAndTypeAndBidQuantity(bidList.getAccount(), bidList.getDealType(), bidList.getBidQuantity()) == null) {
-                bidList.setCreationDate(new Timestamp(System.currentTimeMillis()));
-                res = bidListRepository.save(bidList);
-            } else {
-                throw new IllegalArgumentException("BidList already exists");
-            }
+            res = bidListRepository.save(bidList);
         } else {
             throw new IllegalArgumentException("Invalid BidList");
         }

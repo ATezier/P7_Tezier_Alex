@@ -33,7 +33,7 @@ public class CurveController {
     public String validate(@Valid CurvePoint curvePoint, BindingResult result, Model model) {
         try {
             if (!result.hasErrors()) {
-                curvePointService.add(curvePoint);
+                curvePointService.create(curvePoint);
                 model.addAttribute("curvePoint", curvePointService.findAll());
                 return "redirect:/curvePoint/list";
             }

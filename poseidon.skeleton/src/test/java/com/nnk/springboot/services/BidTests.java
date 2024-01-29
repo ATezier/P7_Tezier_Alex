@@ -28,7 +28,8 @@ public class BidTests {
     @Test
     public void bidListTest() {
         BidList bid = new BidList("Account Test", "Type Test", 10d);
-        bid.setBidListId(1);
+        Integer id = 1;
+        bid.setBidListId(id);
         List<BidList> bidList = new ArrayList<BidList>();
         bidList.add(bid);
 
@@ -36,26 +37,22 @@ public class BidTests {
         Assertions.assertTrue(bidListService.valid(bid));
 
         // Create
-        given(bidListRepository.findByAccountAndTypeAndBidQuantity(
-                bid.getAccount(), bid.getType(), bid.getBidQuantity())).willReturn(null);
         given(bidListRepository.save(bid)).willReturn(bid);
-        bid = bidListService.create(bid);
-        Assertions.assertNotNull(bid);
+        Assertions.assertNotNull(bidListService.create(bid));
 
         // Read
         given(bidListRepository.findAll()).willReturn(bidList);
         Assertions.assertTrue(bidListService.findAll().size() > 0);
 
-        given(bidListRepository.findById(bid.getBidListId())).willReturn(Optional.of(bid));
-        Assertions.assertNotNull(bidListService.findById(bid.getBidListId()));
+        given(bidListRepository.findById(id)).willReturn(Optional.of(bid));
+        Assertions.assertNotNull(bidListService.findById(id));
 
 
         // Update
-        Assertions.assertNotNull(bidListService.update(bid.getBidListId(), new BidList(
+        Assertions.assertNotNull(bidListService.update(id, new BidList(
                 bid.getAccount(), bid.getType(), 20d)));
 
         // Delete
-        Integer id = bid.getBidListId();
         Assertions.assertDoesNotThrow( () -> bidListService.deleteById(id));
     }
 }
