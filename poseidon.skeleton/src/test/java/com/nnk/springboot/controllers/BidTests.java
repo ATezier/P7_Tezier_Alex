@@ -12,4 +12,5 @@ import org.springframework.test.web.servlet.MockMvc;
 public class BidTests {
     @Autowired
     MockMvc mockMvc;
+
 }

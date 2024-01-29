@@ -75,4 +75,9 @@ public class UserService {
         }
         return res;
     }
+    public void passwordValid(String password) {
+        if(!password.matches("^(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$")) {
+            throw new IllegalArgumentException("Un mot de passe doit contenir au moins 8 caractères, une majuscule, un chiffre et un caractère spécial");
+        }
+    }
 }
