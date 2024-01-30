@@ -37,6 +37,9 @@ public class CurvePointService {
 
     public CurvePoint create(CurvePoint curvePoint) {
         CurvePoint res = null;
+        if(curvePoint.getCurveId() == null || curvePoint.getCurveId() == 0) {
+            curvePoint.setCurveId(Math.toIntExact(curvePointRepository.count()) + 1);
+        }
         if (valid(curvePoint)) {
             if(curvePointRepository.findByCurveIdAndTermAndValue(curvePoint.getCurveId(), curvePoint.getTerm(), curvePoint.getValue()) == null) {
                 curvePoint.setCreationDate(new Timestamp(System.currentTimeMillis()));

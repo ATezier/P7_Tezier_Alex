@@ -43,12 +43,12 @@ public class RatingController {
     }
 
     @GetMapping("/rating/update/{id}")
-    public String showUpdateForm(@PathVariable("id") Integer id, Model model, BindingResult result) {
+    public String showUpdateForm(@PathVariable("id") Integer id, Model model) {
         try {
             Rating rating = ratingService.findById(id);
             model.addAttribute("rating", rating);
         } catch (Exception e) {
-            result.rejectValue("name", "error.rating", e.getMessage());
+            //failed to find the rating by id
         }
         return "rating/update";
     }

@@ -21,7 +21,7 @@ public class BidListController {
     @RequestMapping("/bidList/list")
     public String home(Model model)
     {
-        model.addAttribute("bidList", bidListService.findAll());
+        model.addAttribute("bidLists", bidListService.findAll());
         return "bidList/list";
     }
 
@@ -70,13 +70,12 @@ public class BidListController {
     }
 
     @GetMapping("/bidList/delete/{id}")
-    public String deleteBid(@PathVariable("id") Integer id, Model model, BindingResult result) {
+    public String deleteBid(@PathVariable("id") Integer id, Model model) {
         try {
             bidListService.deleteById(id);
             model.addAttribute("bidList", bidListService.findAll());
         } catch (IllegalArgumentException e) {
-            result.rejectValue("id", "bidList.id", e.getMessage());
-            return "redirect:/bidList/list";
+            //case where the id is not in the database
         }
         return "redirect:/bidList/list";
     }

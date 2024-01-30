@@ -89,9 +89,13 @@ public class UserController {
             return "redirect:/user/update"+id;
         }
         try {
-            userService.passwordValid(user.getPassword());
-            BCryptPasswordEncoder encoder = securityConfig.passwordEncoder();
-            user.setPassword(encoder.encode(user.getPassword()));
+            if(user.getPassword().isEmpty()) {
+                user.setPassword(userService.findById(id).getPassword());
+            } else {
+                userService.passwordValid(user.getPassword());
+                BCryptPasswordEncoder encoder = securityConfig.passwordEncoder();
+                user.setPassword(encoder.encode(user.getPassword()));
+            }
             user.setId(id);
             if(user.getRole().equals("ADMIN") && !isAdmin) {
                 result.rejectValue("role", "user.role", "You can't update another user to admin");

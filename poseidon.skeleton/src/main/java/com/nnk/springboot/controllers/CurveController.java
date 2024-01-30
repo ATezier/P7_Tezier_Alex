@@ -20,7 +20,7 @@ public class CurveController {
     @RequestMapping("/curvePoint/list")
     public String home(Model model)
     {
-        model.addAttribute("curvePoint", curvePointService.findAll());
+        model.addAttribute("curvePoints", curvePointService.findAll());
         return "curvePoint/list";
     }
 
@@ -44,12 +44,12 @@ public class CurveController {
     }
 
     @GetMapping("/curvePoint/update/{id}")
-    public String showUpdateForm(@PathVariable("id") Integer id, Model model, BindingResult result) {
+    public String showUpdateForm(@PathVariable("id") Integer id, Model model) {
         try {
             CurvePoint curvePoint = curvePointService.findById(id);
             model.addAttribute("curvePoint", curvePoint);
         } catch (IllegalArgumentException e) {
-            result.rejectValue("curveId", "curvePoint.curveId", e.getMessage());
+            // case curvePoint not found by id
         }
         return "curvePoint/update";
     }
@@ -70,12 +70,12 @@ public class CurveController {
     }
 
     @GetMapping("/curvePoint/delete/{id}")
-    public String deleteBid(@PathVariable("id") Integer id, Model model, BindingResult result) {
+    public String deleteBid(@PathVariable("id") Integer id, Model model) {
         try {
             curvePointService.deleteById(id);
             model.addAttribute("curvePoint", curvePointService.findAll());
         } catch (IllegalArgumentException e) {
-            result.rejectValue("curveId", "curvePoint.curveId", e.getMessage());
+            //case curvePoint not found by id
         }
         return "redirect:/curvePoint/list";
     }

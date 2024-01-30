@@ -43,12 +43,12 @@ public class TradeController {
     }
 
     @GetMapping("/trade/update/{id}")
-    public String showUpdateForm(@PathVariable("id") Integer id, Model model, BindingResult result) {
+    public String showUpdateForm(@PathVariable("id") Integer id, Model model) {
         try {
             Trade trade = tradeService.findById(id);
             model.addAttribute("trade", trade);
         } catch (Exception e) {
-            result.rejectValue("account", "account", e.getMessage());
+            // case trade not found by id
         }
         return "trade/update";
     }
