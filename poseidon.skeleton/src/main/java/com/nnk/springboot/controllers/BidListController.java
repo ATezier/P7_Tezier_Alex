@@ -34,15 +34,15 @@ public class BidListController {
     public String validate(@Valid BidList bid, BindingResult result, Model model) {
         try {
             if (result.hasErrors()) {
-                return "bidList/add";
+                return "redirect:/bidList/add";
             }
             bidListService.create(bid);
             model.addAttribute("bidList", bidListService.findAll());
         } catch (IllegalArgumentException e) {
             result.rejectValue("id", "bidList.id", e.getMessage());
-            return "bidList/add";
+            return "redirect:/bidList/add";
         }
-        return "bidList/add";
+        return "redirect:/bidList/list";
     }
 
     @GetMapping("/bidList/update/{id}")

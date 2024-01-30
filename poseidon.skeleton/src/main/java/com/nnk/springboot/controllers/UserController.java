@@ -5,6 +5,9 @@ import com.nnk.springboot.domain.User;
 import com.nnk.springboot.services.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,6 +16,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import java.util.Collection;
 
 @Controller
 public class UserController {
@@ -27,7 +32,20 @@ public class UserController {
     @RequestMapping("/user/list")
     public String home(Model model)
     {
-        model.addAttribute("users", userService.findAll());
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Collection<? extends GrantedAuthority> roles = ((UserDetails) principal).getAuthorities();
+        boolean isAdmin = false;
+        for (GrantedAuthority role : roles) {
+            if (role.getAuthority().equals("ROLE_ADMIN")) {
+                isAdmin = true;
+                break;
+            }
+        }
+        if (isAdmin) {
+            model.addAttribute("users", userService.findAll());
+        } else {
+            model.addAttribute("users", userService.findByUsername(((UserDetails) principal).getUsername()));
+        }
         return "user/list";
     }
 
