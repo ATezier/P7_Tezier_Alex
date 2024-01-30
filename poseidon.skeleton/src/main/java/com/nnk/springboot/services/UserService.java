@@ -2,6 +2,8 @@ package com.nnk.springboot.services;
 
 import com.nnk.springboot.domain.User;
 import com.nnk.springboot.repositories.UserRepository;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
@@ -79,5 +81,24 @@ public class UserService {
         if(!password.matches("^(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$")) {
             throw new IllegalArgumentException("Un mot de passe doit contenir au moins 8 caractères, une majuscule, un chiffre et un caractère spécial");
         }
+    }
+
+    public boolean isAdmin(SecurityContext securityContext) {
+        boolean isAdmin = false;
+        UserDetails user = getUserDetailsFromSecurityContext(securityContext);
+        if (user.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"))) {
+            isAdmin = true;
+        }
+        return isAdmin;
+    }
+
+    public boolean idVerifier(Integer id, SecurityContext securityContext) {
+        UserDetails user = getUserDetailsFromSecurityContext(securityContext);
+        Integer _id = this.findByUsername(user.getUsername()).getId();
+        return _id == id;
+    }
+
+    public UserDetails getUserDetailsFromSecurityContext(SecurityContext securityContext) {
+        return ((UserDetails) securityContext.getAuthentication().getPrincipal());
     }
 }

@@ -5,7 +5,6 @@ import com.nnk.springboot.domain.User;
 import com.nnk.springboot.services.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -16,8 +15,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-
-import java.util.Collection;
 
 @Controller
 public class UserController {
@@ -32,19 +29,13 @@ public class UserController {
     @RequestMapping("/user/list")
     public String home(Model model)
     {
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Collection<? extends GrantedAuthority> roles = ((UserDetails) principal).getAuthorities();
-        boolean isAdmin = false;
-        for (GrantedAuthority role : roles) {
-            if (role.getAuthority().equals("ROLE_ADMIN")) {
-                isAdmin = true;
-                break;
-            }
-        }
+        UserDetails userDetails = userService.getUserDetailsFromSecurityContext(SecurityContextHolder.getContext());
+        boolean isAdmin = userService.isAdmin(SecurityContextHolder.getContext());
+        model.addAttribute("displayAddBtn", isAdmin);
         if (isAdmin) {
             model.addAttribute("users", userService.findAll());
         } else {
-            model.addAttribute("users", userService.findByUsername(((UserDetails) principal).getUsername()));
+            model.addAttribute("users", userService.findByUsername(userDetails.getUsername()));
         }
         return "user/list";
     }
@@ -56,7 +47,8 @@ public class UserController {
 
     @PostMapping("/user/validate")
     public String validate(@Valid User user, BindingResult result, Model model) {
-        if (!result.hasErrors()) {
+        boolean isAdmin = userService.isAdmin(SecurityContextHolder.getContext());
+        if (!result.hasErrors() && isAdmin) {
             try {
                 userService.passwordValid(user.getPassword());
                 BCryptPasswordEncoder encoder = securityConfig.passwordEncoder();
@@ -90,11 +82,21 @@ public class UserController {
         if (result.hasErrors()) {
             return "redirect:/user/update/"+id;
         }
+        boolean isAdmin = userService.isAdmin(SecurityContextHolder.getContext());
+        boolean ownedId = userService.idVerifier(id, SecurityContextHolder.getContext());
+        if (!isAdmin && !ownedId) {
+            result.rejectValue("username", "user.id", "You can't update another user");
+            return "redirect:/user/update"+id;
+        }
         try {
             userService.passwordValid(user.getPassword());
             BCryptPasswordEncoder encoder = securityConfig.passwordEncoder();
             user.setPassword(encoder.encode(user.getPassword()));
             user.setId(id);
+            if(user.getRole().equals("ADMIN") && !isAdmin) {
+                result.rejectValue("role", "user.role", "You can't update another user to admin");
+                return "redirect:/user/update/"+id;
+            }
             userService.update(id, user);
         } catch (Exception e) {
             result.rejectValue("password", "user.password", e.getMessage());
@@ -106,6 +108,11 @@ public class UserController {
 
     @GetMapping("/user/delete/{id}")
     public String deleteUser(@PathVariable("id") Integer id, Model model) {
+        boolean isAdmin = userService.isAdmin(SecurityContextHolder.getContext());
+        boolean ownedId = userService.idVerifier(id, SecurityContextHolder.getContext());
+        if (!isAdmin && !ownedId) {
+            throw new IllegalArgumentException("You can't delete another user");
+        }
         try {
             userService.deleteById(id);
         } catch (Exception e) {
