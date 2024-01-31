@@ -77,12 +77,25 @@ public class UserService {
         }
         return res;
     }
+
+    /**
+     * Validates the password according to the specified criteria.
+     *
+     * @param password the password to validate
+     * @throws IllegalArgumentException if the password does not meet the specified criteria
+     */
     public void passwordValid(String password) {
         if(!password.matches("^(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$")) {
-            throw new IllegalArgumentException("Un mot de passe doit contenir au moins 8 caractères, une majuscule, un chiffre et un caractère spécial");
+            throw new IllegalArgumentException("A password must contain at least 8 characters, one uppercase letter, one digit, and one special character");
         }
     }
 
+    /**
+     * Checks if the user associated with the provided SecurityContext is an admin.
+     *
+     * @param securityContext the SecurityContext object
+     * @return true if the user is an admin, otherwise false
+     */
     public boolean isAdmin(SecurityContext securityContext) {
         boolean isAdmin = false;
         UserDetails user = getUserDetailsFromSecurityContext(securityContext);
@@ -92,12 +105,25 @@ public class UserService {
         return isAdmin;
     }
 
+    /**
+     * Verifies if the provided user ID matches the ID of the user associated with the provided SecurityContext.
+     *
+     * @param id the ID to verify
+     * @param securityContext the SecurityContext object
+     * @return true if the provided ID matches the ID of the user, otherwise false
+     */
     public boolean idVerifier(Integer id, SecurityContext securityContext) {
         UserDetails user = getUserDetailsFromSecurityContext(securityContext);
         Integer _id = this.findByUsername(user.getUsername()).getId();
-        return _id == id;
+        return _id.equals(id);
     }
 
+    /**
+     * Retrieves UserDetails from the SecurityContext.
+     *
+     * @param securityContext the SecurityContext object
+     * @return UserDetails object retrieved from the SecurityContext
+     */
     public UserDetails getUserDetailsFromSecurityContext(SecurityContext securityContext) {
         return ((UserDetails) securityContext.getAuthentication().getPrincipal());
     }
