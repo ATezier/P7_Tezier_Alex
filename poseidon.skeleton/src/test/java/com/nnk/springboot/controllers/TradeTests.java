@@ -36,19 +36,19 @@ public class TradeTests {
     }
     @Test
     @WithMockUser(username = "Tester", roles = "USER")
-    public void bidListHome() throws Exception {
+    public void tradeHome() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/trade/list"))
                 .andExpect(MockMvcResultMatchers.status().isOk());
     }
     @Test
     @WithMockUser(username = "Tester", roles = "USER")
-    public void bidListAdd() throws Exception {
+    public void tradeAddForm() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/trade/add"))
                 .andExpect(MockMvcResultMatchers.status().isOk());
     }
     @Test
     @WithMockUser(username = "Tester", roles = "USER")
-    public void BidListCUD() throws Exception {
+    public void tradeCUD() throws Exception {
         Trade trade = new Trade("Trade Account", "Type", 10d);
 
         // Create

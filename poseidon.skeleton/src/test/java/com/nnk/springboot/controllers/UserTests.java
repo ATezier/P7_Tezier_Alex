@@ -34,20 +34,20 @@ public class UserTests {
         mockMvc = MockMvcBuilders.webAppContextSetup(context).build();
     }
     @Test
-    @WithMockUser(username = "Tester", roles = "USER")
-    public void bidListHome() throws Exception {
+    @WithMockUser(username = "user", roles = "USER")
+    public void userList() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/user/list"))
                 .andExpect(MockMvcResultMatchers.status().isOk());
     }
     @Test
     @WithMockUser(username = "Tester", roles = "USER")
-    public void bidListAdd() throws Exception {
+    public void userAddForm() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/user/add"))
                 .andExpect(MockMvcResultMatchers.status().isOk());
     }
     @Test
     @WithMockUser(username = "Tester", roles = "ADMIN")
-    public void BidListCUD() throws Exception {
+    public void userCUD() throws Exception {
         User user = new User("Tester", "Password1*", "Fullname", "ADMIN");
 
         // Create

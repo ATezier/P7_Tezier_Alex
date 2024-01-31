@@ -36,19 +36,19 @@ public class RuleTests {
     }
     @Test
     @WithMockUser(username = "Tester", roles = "USER")
-    public void bidListHome() throws Exception {
+    public void ruleNameHome() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/ruleName/list"))
                 .andExpect(MockMvcResultMatchers.status().isOk());
     }
     @Test
     @WithMockUser(username = "Tester", roles = "USER")
-    public void bidListAdd() throws Exception {
+    public void ruleNameAddForm() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/ruleName/add"))
                 .andExpect(MockMvcResultMatchers.status().isOk());
     }
     @Test
     @WithMockUser(username = "Tester", roles = "USER")
-    public void BidListCUD() throws Exception {
+    public void ruleNameCUD() throws Exception {
         RuleName ruleName = new RuleName("Name Test", "Description", "Json", "Template", "SQL", "SQL Part");
 
         // Create

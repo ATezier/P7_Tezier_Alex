@@ -36,19 +36,19 @@ public class CurvePointTests {
     }
     @Test
     @WithMockUser(username = "Tester", roles = "USER")
-    public void bidListHome() throws Exception {
+    public void curvePointList() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/curvePoint/list"))
                 .andExpect(MockMvcResultMatchers.status().isOk());
     }
     @Test
     @WithMockUser(username = "Tester", roles = "USER")
-    public void bidListAdd() throws Exception {
+    public void curvePointAddForm() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/curvePoint/add"))
                 .andExpect(MockMvcResultMatchers.status().isOk());
     }
     @Test
     @WithMockUser(username = "Tester", roles = "USER")
-    public void BidListCUD() throws Exception {
+    public void curvePointCUD() throws Exception {
         CurvePoint curvePoint = new CurvePoint(1, 10d, 30d);
 
         // Create

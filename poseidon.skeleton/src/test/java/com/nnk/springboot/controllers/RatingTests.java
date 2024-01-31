@@ -36,19 +36,19 @@ public class RatingTests {
     }
     @Test
     @WithMockUser(username = "Tester", roles = "USER")
-    public void bidListHome() throws Exception {
+    public void ratingHome() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/rating/list"))
                 .andExpect(MockMvcResultMatchers.status().isOk());
     }
     @Test
     @WithMockUser(username = "Tester", roles = "USER")
-    public void bidListAdd() throws Exception {
+    public void ratingAddForm() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/rating/add"))
                 .andExpect(MockMvcResultMatchers.status().isOk());
     }
     @Test
     @WithMockUser(username = "Tester", roles = "USER")
-    public void BidListCUD() throws Exception {
+    public void ratingCUD() throws Exception {
         Rating rating = new Rating("Moodys Rating", "Sand PRating", "Fitch Rating", 10);
 
         // Create
