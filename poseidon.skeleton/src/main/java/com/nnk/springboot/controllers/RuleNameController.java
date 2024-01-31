@@ -43,12 +43,12 @@ public class RuleNameController {
     }
 
     @GetMapping("/ruleName/update/{id}")
-    public String showUpdateForm(@PathVariable("id") Integer id, Model model, BindingResult result) {
+    public String showUpdateForm(@PathVariable("id") Integer id, Model model) {
         try {
             RuleName ruleName = ruleNameService.findById(id);
             model.addAttribute("ruleName", ruleName);
         } catch (Exception e) {
-            result.rejectValue("name", "error.ruleName", e.getMessage());
+            // case ruleName not found by id
         }
         return "ruleName/update";
     }

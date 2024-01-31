@@ -39,7 +39,7 @@ public class RatingController {
         } catch (Exception e) {
             result.rejectValue("name", "error.rating", e.getMessage());
         }
-        return "rating/add";
+        return "redirect:/rating/add";
     }
 
     @GetMapping("/rating/update/{id}")

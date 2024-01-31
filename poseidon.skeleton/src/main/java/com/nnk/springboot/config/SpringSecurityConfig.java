@@ -9,19 +9,26 @@ import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 @EnableWebSecurity
 public class SpringSecurityConfig {
+
     @Autowired
     private CustomUserDetailsService customUserDetailsService;
+
     @Autowired
     private UserRepository userRepository;
 
+    /**
+     * Configures security filter chain for the application.
+     *
+     * @param http the HttpSecurity object to configure security
+     * @return the configured security filter chain
+     * @throws Exception if an error occurs during configuration
+     */
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http.authorizeHttpRequests(auth -> {
@@ -36,10 +43,25 @@ public class SpringSecurityConfig {
             auth.anyRequest().authenticated();
         }).formLogin(Customizer.withDefaults()).build();
     }
+
+    /**
+     * Creates a BCryptPasswordEncoder bean.
+     *
+     * @return a BCryptPasswordEncoder object
+     */
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+
+    /**
+     * Creates an AuthenticationManager bean.
+     *
+     * @param http the HttpSecurity object to configure security
+     * @param bCryptPasswordEncoder the BCryptPasswordEncoder object for password encoding
+     * @return an AuthenticationManager object
+     * @throws Exception if an error occurs during configuration
+     */
     @Bean
     AuthenticationManager authenticationManager(HttpSecurity http, BCryptPasswordEncoder bCryptPasswordEncoder)
             throws Exception {
@@ -48,9 +70,5 @@ public class SpringSecurityConfig {
         authenticationManagerBuilder.userDetailsService(customUserDetailsService)
                 .passwordEncoder(bCryptPasswordEncoder);
         return authenticationManagerBuilder.build();
-    }
-
-    public UserDetails getUserDetailsFromSecurityContext(SecurityContext securityContext) {
-        return ((UserDetails) securityContext.getAuthentication().getPrincipal());
     }
 }

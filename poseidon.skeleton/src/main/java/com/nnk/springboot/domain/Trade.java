@@ -54,10 +54,10 @@ public class Trade {
     @Column(name = "side")
     String side;
 
-    public Trade(String account, String type) {
+    public Trade(String account, String type, Double buyQuantity) {
         this.account = account;
         this.type = type;
-        this.buyQuantity = 0.0;
+        this.buyQuantity = buyQuantity;
         this.sellQuantity = 0.0;
         this.buyPrice = 0.0;
         this.sellPrice = 0.0;

@@ -27,7 +27,7 @@ public class TradeTests {
 
     @Test
     public void tradeTest() {
-        Trade trade = new Trade("Trade Account", "Type");
+        Trade trade = new Trade("Trade Account", "Type", 10d);
         Integer id = 1;
         trade.setTradeId(id);
         List<Trade> trades = new ArrayList<Trade>();
@@ -49,8 +49,7 @@ public class TradeTests {
 
 
         // Update
-        Assertions.assertNotNull(tradeService.update(id, new Trade(
-                trade.getAccount(), "TYPE")));
+        Assertions.assertNotNull(tradeService.update(id, new Trade(trade.getAccount(), "TYPE", trade.getBuyQuantity())));
 
         // Delete
         Assertions.assertDoesNotThrow( () -> tradeService.deleteById(id));
