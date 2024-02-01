@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 public class UserController {
@@ -27,10 +28,12 @@ public class UserController {
     public String user() { return "Welcome user"; }
 
     @RequestMapping("/user/list")
-    public String home(Model model)
+    public String home(Model model, RedirectAttributes redirect)
     {
         UserDetails userDetails = userService.getUserDetailsFromSecurityContext(SecurityContextHolder.getContext());
         boolean isAdmin = userService.isAdmin(SecurityContextHolder.getContext());
+        String error = (String) redirect.getFlashAttributes().get("error");
+        if (error != null) model.addAttribute("error", error);
         model.addAttribute("displayAddBtn", isAdmin);
         if (isAdmin) {
             model.addAttribute("users", userService.findAll());
@@ -58,20 +61,20 @@ public class UserController {
                 result.rejectValue("password", "user.password", e.getMessage());
                 return "user/add";
             }
-            model.addAttribute("users", userService.findAll());
             return "redirect:/user/list";
         }
         return "user/add";
     }
 
     @GetMapping("/user/update/{id}")
-    public String showUpdateForm(@PathVariable("id") Integer id, Model model) {
+    public String showUpdateForm(@PathVariable("id") Integer id, Model model, RedirectAttributes redirect) {
         try {
             User user = userService.findById(id);
             user.setPassword("");
             model.addAttribute("user", user);
         } catch (Exception e) {
-            throw new IllegalArgumentException("Invalid user Id:" + id);
+            redirect.addFlashAttribute("error", e.getMessage());
+            return "redirect:/user/list";
         }
         return "user/update";
     }
@@ -85,8 +88,8 @@ public class UserController {
         boolean isAdmin = userService.isAdmin(SecurityContextHolder.getContext());
         boolean ownedId = userService.idVerifier(id, SecurityContextHolder.getContext());
         if (!isAdmin && !ownedId) {
-            result.rejectValue("username", "user.id", "You can't update another user");
-            return "redirect:/user/update"+id;
+            model.addAttribute("error", "You don't have the right to update another user");
+            return "redirect:/user/list";
         }
         try {
             if(user.getPassword().isEmpty()) {
@@ -98,31 +101,30 @@ public class UserController {
             }
             user.setId(id);
             if(user.getRole().equals("ADMIN") && !isAdmin) {
-                result.rejectValue("role", "user.role", "You can't update another user to admin");
-                return "redirect:/user/update/"+id;
+                result.rejectValue("error", "You don't have the right to update a user to ADMIN");
+                return "redirect:/user/list";
             }
             userService.update(id, user);
         } catch (Exception e) {
             result.rejectValue("password", "user.password", e.getMessage());
             return "redirect:/user/update/"+id;
         }
-        model.addAttribute("users", userService.findAll());
         return "redirect:/user/list";
     }
 
     @GetMapping("/user/delete/{id}")
-    public String deleteUser(@PathVariable("id") Integer id, Model model) {
+    public String deleteUser(@PathVariable("id") Integer id, Model model, RedirectAttributes redirect) {
         boolean isAdmin = userService.isAdmin(SecurityContextHolder.getContext());
         boolean ownedId = userService.idVerifier(id, SecurityContextHolder.getContext());
         if (!isAdmin && !ownedId) {
-            throw new IllegalArgumentException("You can't delete another user");
+            redirect.addFlashAttribute("error", "You don't have the right to delete another user");
+        } else {
+            try {
+                userService.deleteById(id);
+            } catch (Exception e) {
+                redirect.addFlashAttribute("error", e.getMessage());
+            }
         }
-        try {
-            userService.deleteById(id);
-        } catch (Exception e) {
-            throw new IllegalArgumentException("Invalid user Id:" + id);
-        }
-        model.addAttribute("users", userService.findAll());
         return "redirect:/user/list";
     }
 }

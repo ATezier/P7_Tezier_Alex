@@ -32,7 +32,7 @@ public class RatingService {
     }
 
     public Rating findById(Integer id) {
-        return ratingRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid rating Id:" + id));
+        return ratingRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Rating not found."));
     }
 
     public List<Rating> findAll() { return ratingRepository.findAll(); }
@@ -58,7 +58,7 @@ public class RatingService {
                 ratingToUpdate.setOrderNumber(rating.getOrderNumber());
                 res = ratingRepository.save(ratingToUpdate);
             } catch (Exception e) {
-                throw new IllegalArgumentException("Invalid rating Id:" + id);
+                throw new IllegalArgumentException("Rating not found, cannot be updated.");
             }
         } else {
             throw new IllegalArgumentException("Invalid rating");
@@ -71,7 +71,7 @@ public class RatingService {
             Rating rating = this.findById(id);
             ratingRepository.delete(rating);
         } catch (Exception e) {
-            throw new IllegalArgumentException("Invalid rating Id:" + id);
+            throw new IllegalArgumentException("Rating not found, cannot be deleted.");
         }
     }
 }

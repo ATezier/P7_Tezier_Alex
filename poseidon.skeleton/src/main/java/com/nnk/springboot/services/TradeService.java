@@ -17,7 +17,7 @@ public class TradeService {
     public List<Trade> findAll() { return tradeRepository.findAll(); }
 
     public Trade findById(Integer id) {
-        return tradeRepository.findById(id).orElseThrow(() -> {throw new IllegalArgumentException("Invalid id :" + id);});
+        return tradeRepository.findById(id).orElseThrow(() -> {throw new IllegalArgumentException("Trade not found");});
     }
 
     public boolean valid(Trade trade) {
@@ -71,7 +71,7 @@ public class TradeService {
                 tradeToUpdate.setSide(trade.getSide());
                 res = tradeRepository.save(tradeToUpdate);
             } catch (Exception e) {
-                throw new IllegalArgumentException("Trade doesn't exist");
+                throw new IllegalArgumentException("Trade not found, cannot be updated");
             }
         } else {
             throw new IllegalArgumentException("Invalid trade");
@@ -84,7 +84,7 @@ public class TradeService {
             Trade tradeToDelete = this.findById(id);
             tradeRepository.delete(tradeToDelete);
         } catch (Exception e) {
-            throw new IllegalArgumentException("Invalid id :" + id);
+            throw new IllegalArgumentException("Trade not found, cannot be deleted");
         }
     }
 }

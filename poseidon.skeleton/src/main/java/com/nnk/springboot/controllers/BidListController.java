@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 
 @Controller
@@ -19,8 +20,10 @@ public class BidListController {
     BidListService bidListService;
 
     @RequestMapping("/bidList/list")
-    public String home(Model model)
+    public String home(Model model, RedirectAttributes redirect)
     {
+        String error = (String) model.getAttribute("error");
+        if(error != null) model.addAttribute("error", error);
         model.addAttribute("bidLists", bidListService.findAll());
         return "bidList/list";
     }
@@ -37,22 +40,20 @@ public class BidListController {
                 return "redirect:/bidList/add";
             }
             bidListService.create(bid);
-            model.addAttribute("bidList", bidListService.findAll());
         } catch (IllegalArgumentException e) {
-            result.rejectValue("id", "bidList.id", e.getMessage());
+            result.rejectValue("account", "error.account", e.getMessage());
             return "redirect:/bidList/add";
         }
         return "redirect:/bidList/list";
     }
 
     @GetMapping("/bidList/update/{id}")
-    public String showUpdateForm(@PathVariable("id") Integer id, Model model) {
+    public String showUpdateForm(@PathVariable("id") Integer id, Model model, RedirectAttributes redirect) {
         try {
             BidList bidList = bidListService.findById(id);
             model.addAttribute("bidList", bidList);
         } catch (IllegalArgumentException e) {
-            model.addAttribute("bidList", bidListService.findAll());
-            return "redirect:/bidList/list";
+            redirect.addFlashAttribute("error", e.getMessage());
         }
         return "bidList/update";
     }
@@ -63,19 +64,18 @@ public class BidListController {
         try {
             bidListService.update(id, bidList);
         } catch (IllegalArgumentException e) {
-            result.rejectValue("id", "bidList.id", e.getMessage());
-            return "bidList/update";
+            result.rejectValue("bidListId", "bidList.id", e.getMessage());
+            return "redirect:/bidList/update";
         }
         return "redirect:/bidList/list";
     }
 
     @GetMapping("/bidList/delete/{id}")
-    public String deleteBid(@PathVariable("id") Integer id, Model model) {
+    public String deleteBid(@PathVariable("id") Integer id, Model model, RedirectAttributes redirect) {
         try {
             bidListService.deleteById(id);
-            model.addAttribute("bidList", bidListService.findAll());
         } catch (IllegalArgumentException e) {
-            //case where the id is not in the database
+            redirect.addFlashAttribute("error", e.getMessage());
         }
         return "redirect:/bidList/list";
     }

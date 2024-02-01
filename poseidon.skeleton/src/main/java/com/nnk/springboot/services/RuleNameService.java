@@ -42,7 +42,7 @@ public class RuleNameService {
     }
 
     public RuleName findById(Integer id) {
-        return ruleNameRepository.findById(id).orElseThrow( () -> new IllegalArgumentException("Invalid rule name Id:" + id) );
+        return ruleNameRepository.findById(id).orElseThrow( () -> new IllegalArgumentException("RuleName not found") );
     }
 
     public RuleName create(RuleName ruleName) {
@@ -79,7 +79,7 @@ public class RuleNameService {
                     res = ruleNameRepository.save(ruleNameToUpdate);
                 }
             } catch (Exception e) {
-                throw new IllegalArgumentException("Rule name doesn't exist");
+                throw new IllegalArgumentException("RuleName not found, cannot be updated");
             }
         } else {
             throw new IllegalArgumentException("Invalid rule name");
@@ -92,7 +92,7 @@ public class RuleNameService {
             RuleName ruleName = this.findById(id);
             ruleNameRepository.delete(ruleName);
         } catch (Exception e) {
-            throw new IllegalArgumentException("Invalid rule name Id:" + id);
+            throw new IllegalArgumentException("RuleName not found, cannot be deleted");
         }
     }
 }

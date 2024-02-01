@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 public class TradeController {
@@ -18,8 +19,10 @@ public class TradeController {
     TradeService tradeService;
 
     @RequestMapping("/trade/list")
-    public String home(Model model)
+    public String home(Model model, RedirectAttributes redirect)
     {
+        String error = (String) redirect.getFlashAttributes().get("error");
+        if (error != null) model.addAttribute("error", error);
         model.addAttribute("trades", tradeService.findAll());
         return "trade/list";
     }
@@ -43,12 +46,13 @@ public class TradeController {
     }
 
     @GetMapping("/trade/update/{id}")
-    public String showUpdateForm(@PathVariable("id") Integer id, Model model) {
+    public String showUpdateForm(@PathVariable("id") Integer id, Model model, RedirectAttributes redirect) {
         try {
             Trade trade = tradeService.findById(id);
             model.addAttribute("trade", trade);
         } catch (Exception e) {
-            // case trade not found by id
+            redirect.addFlashAttribute("error", e.getMessage());
+            return "redirect:/trade/list";
         }
         return "trade/update";
     }
@@ -59,20 +63,20 @@ public class TradeController {
         try {
             if (!result.hasErrors()) {
                 tradeService.update(id, trade);
-                return "redirect:/trade/list";
             }
         } catch (Exception e) {
             result.rejectValue("account", "account", e.getMessage());
+            return "redirect:/trade/update";
         }
         return "redirect:/trade/list";
     }
 
     @GetMapping("/trade/delete/{id}")
-    public String deleteTrade(@PathVariable("id") Integer id, Model model) {
+    public String deleteTrade(@PathVariable("id") Integer id, Model model, RedirectAttributes redirectAttributes) {
         try {
             tradeService.deleteById(id);
         } catch (Exception e) {
-            model.addAttribute("error", e.getMessage());
+            redirectAttributes.addFlashAttribute("error", e.getMessage());
         }
         return "redirect:/trade/list";
     }

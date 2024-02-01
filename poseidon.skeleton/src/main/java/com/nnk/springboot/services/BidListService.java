@@ -27,7 +27,7 @@ public class BidListService {
             BidList bidList = this.findById(id);
             bidListRepository.delete(bidList);
         } catch (IllegalArgumentException e) {
-            throw new IllegalArgumentException("Invalid Id");
+            throw new IllegalArgumentException("BidList not found, cannot be deleted");
         }
     }
 
@@ -65,10 +65,10 @@ public class BidListService {
                 bidListToUpdate.setBidQuantity(bidList.getBidQuantity());
                 res = bidListRepository.save(bidListToUpdate);
             } catch (IllegalArgumentException e) {
-                throw new IllegalArgumentException("BidList does not exist");
+                throw new IllegalArgumentException("BidList not found, cannot be updated");
             }
         } else {
-            throw new IllegalArgumentException("Invalid BidList");
+            throw new IllegalArgumentException("BidList is not valid");
         }
         return res;
     }

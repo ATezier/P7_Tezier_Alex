@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 public class RatingController {
@@ -18,8 +19,10 @@ public class RatingController {
     private RatingService ratingService;
 
     @RequestMapping("/rating/list")
-    public String home(Model model)
+    public String home(Model model, RedirectAttributes redirect)
     {
+        String error = (String) redirect.getAttribute("error");
+        if (error != null) model.addAttribute("error", error);
         model.addAttribute("ratings", ratingService.findAll());
         return "rating/list";
     }
@@ -43,12 +46,13 @@ public class RatingController {
     }
 
     @GetMapping("/rating/update/{id}")
-    public String showUpdateForm(@PathVariable("id") Integer id, Model model) {
+    public String showUpdateForm(@PathVariable("id") Integer id, Model model, RedirectAttributes redirect) {
         try {
             Rating rating = ratingService.findById(id);
             model.addAttribute("rating", rating);
         } catch (Exception e) {
-            //failed to find the rating by id
+            redirect.addFlashAttribute("error", e.getMessage());
+            return "redirect:/rating/list";
         }
         return "rating/update";
     }
@@ -59,20 +63,20 @@ public class RatingController {
         try {
             if (!result.hasErrors()) {
                 ratingService.update(id, rating);
-                return "redirect:/rating/list";
             }
         } catch (Exception e) {
             result.rejectValue("name", "error.rating", e.getMessage());
+            return "redirect:/rating/update";
         }
         return "redirect:/rating/list";
     }
 
     @GetMapping("/rating/delete/{id}")
-    public String deleteRating(@PathVariable("id") Integer id, Model model) {
+    public String deleteRating(@PathVariable("id") Integer id, Model model, RedirectAttributes redirect) {
         try {
             ratingService.deleteById(id);
         } catch (Exception e) {
-            model.addAttribute("error", "The rating has not been deleted.");
+            redirect.addFlashAttribute("error", e.getMessage());
         }
         return "redirect:/rating/list";
     }

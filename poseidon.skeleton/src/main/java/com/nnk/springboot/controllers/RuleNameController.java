@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 public class RuleNameController {
@@ -18,8 +19,9 @@ public class RuleNameController {
     private RuleNameService ruleNameService;
 
     @RequestMapping("/ruleName/list")
-    public String home(Model model)
-    {
+    public String home(Model model, RedirectAttributes redirect) {
+        String error = (String) redirect.getFlashAttributes().get("error");
+        if (error != null) model.addAttribute("error", error);
         model.addAttribute("ruleNames", ruleNameService.findAll());
         return "ruleName/list";
     }
@@ -43,12 +45,13 @@ public class RuleNameController {
     }
 
     @GetMapping("/ruleName/update/{id}")
-    public String showUpdateForm(@PathVariable("id") Integer id, Model model) {
+    public String showUpdateForm(@PathVariable("id") Integer id, Model model, RedirectAttributes redirect) {
         try {
             RuleName ruleName = ruleNameService.findById(id);
             model.addAttribute("ruleName", ruleName);
         } catch (Exception e) {
-            // case ruleName not found by id
+            redirect.addFlashAttribute("error", e.getMessage());
+            return "redirect:/ruleName/list";
         }
         return "ruleName/update";
     }
@@ -59,20 +62,20 @@ public class RuleNameController {
         try {
             if (!result.hasErrors()) {
                 ruleNameService.update(id, ruleName);
-                return "redirect:/ruleName/list";
             }
         } catch (Exception e) {
             result.rejectValue("name", "error.ruleName", e.getMessage());
+            return "redirect:/ruleName/update";
         }
         return "redirect:/ruleName/list";
     }
 
     @GetMapping("/ruleName/delete/{id}")
-    public String deleteRuleName(@PathVariable("id") Integer id, Model model) {
+    public String deleteRuleName(@PathVariable("id") Integer id, Model model, RedirectAttributes redirect) {
         try {
             ruleNameService.deleteById(id);
         } catch (Exception e) {
-            model.addAttribute("error", e.getMessage());
+            redirect.addFlashAttribute("error", e.getMessage());
         }
         return "redirect:/ruleName/list";
     }
