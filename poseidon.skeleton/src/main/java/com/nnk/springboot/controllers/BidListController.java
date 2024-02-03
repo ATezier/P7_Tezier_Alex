@@ -54,6 +54,7 @@ public class BidListController {
             model.addAttribute("bidList", bidList);
         } catch (IllegalArgumentException e) {
             redirect.addFlashAttribute("error", e.getMessage());
+            return "redirect:/bidList/list";
         }
         return "bidList/update";
     }

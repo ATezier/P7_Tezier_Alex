@@ -32,7 +32,7 @@ public class UserService {
         return isValid;
     }
     public List<User> findAll() {return userRepository.findAll();}
-    public User findById(Integer id) { return userRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid user Id:" + id)); }
+    public User findById(Integer id) { return userRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("User not fount.")); }
 
     public User findByUsername(String username) { return userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException(username + "doesn't exist")); }
     public void deleteById(Integer id) {
@@ -40,7 +40,7 @@ public class UserService {
             User user = this.findById(id);
             userRepository.delete(user);
         } catch (Exception e) {
-            throw new IllegalArgumentException("Invalid user Id:" + id);
+            throw new IllegalArgumentException("User not found. Cannot be deleted.");
         }
     }
 
@@ -70,7 +70,7 @@ public class UserService {
                 oldUser.setUsername(user.getUsername());
                 res = userRepository.save(oldUser);
             } catch (Exception e) {
-                throw new IllegalArgumentException("Invalid user Id:" + id);
+                throw new IllegalArgumentException("User not found. Cannot be updated.");
             }
         } else {
             throw new IllegalArgumentException("Invalid user");

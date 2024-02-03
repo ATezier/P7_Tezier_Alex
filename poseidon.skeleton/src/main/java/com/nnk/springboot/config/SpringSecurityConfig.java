@@ -1,6 +1,5 @@
 package com.nnk.springboot.config;
 
-import com.nnk.springboot.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,12 +14,8 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration
 @EnableWebSecurity
 public class SpringSecurityConfig {
-
     @Autowired
     private CustomUserDetailsService customUserDetailsService;
-
-    @Autowired
-    private UserRepository userRepository;
 
     /**
      * Configures security filter chain for the application.

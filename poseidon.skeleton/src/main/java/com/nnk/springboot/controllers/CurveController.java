@@ -52,6 +52,7 @@ public class CurveController {
             model.addAttribute("curvePoint", curvePoint);
         } catch (IllegalArgumentException e) {
             redirect.addFlashAttribute("error", e.getMessage());
+            return "redirect:/curvePoint/list";
         }
         return "curvePoint/update";
     }
