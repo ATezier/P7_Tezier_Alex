@@ -1,6 +1,7 @@
 package com.nnk.springboot.domain;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Pattern;
 import lombok.NoArgsConstructor;
 
 import java.sql.Timestamp;
@@ -17,12 +18,16 @@ public class BidList {
     @Column(name = "type")
     String type;
     @Column(name = "bidQuantity")
+    @Pattern(regexp = "[+]?([0-9]*[.])?[0-9]+", message = "The value must be a number")
     Double bidQuantity;
     @Column(name = "bid")
+    @Pattern(regexp = "[+]?([0-9]*[.])?[0-9]+", message = "The value must be a number")
     Double bid;
     @Column(name = "askQuantity")
+    @Pattern(regexp = "[+]?([0-9]*[.])?[0-9]+", message = "The value must be a number")
     Double askQuantity;
     @Column(name = "ask")
+    @Pattern(regexp = "[+]?([0-9]*[.])?[0-9]+", message = "The value must be a number")
     Double ask;
     @Column(name = "benchmark")
     String benchmark;

@@ -1,6 +1,7 @@
 package com.nnk.springboot.domain;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Pattern;
 import lombok.NoArgsConstructor;
 
 @Entity
@@ -11,12 +12,16 @@ public class Rating {
     @GeneratedValue(strategy= GenerationType.AUTO)
     Integer id;
     @Column(name = "moodysRating")
+    @Pattern(regexp = "[+]?([0-9]*[.])?[0-9]+", message = "The value must be a number")
     String moodysRating;
     @Column(name = "sandPRating")
+    @Pattern(regexp = "[+]?([0-9]*[.])?[0-9]+", message = "The value must be a number")
     String sandPRating;
     @Column(name = "fitchRating")
+    @Pattern(regexp = "[+]?([0-9]*[.])?[0-9]+", message = "The value must be a number")
     String fitchRating;
     @Column(name = "orderNumber")
+    @Pattern(regexp = "[0-9]+", message = "The value must be a number")
     Integer orderNumber;
 
     public Rating(String moodysRating, String sandPRating, String fitchRating, Integer orderNumber) {

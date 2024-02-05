@@ -27,13 +27,13 @@ public class SpringSecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http.authorizeHttpRequests(auth -> {
-            auth.requestMatchers("/home/**").hasRole("USER");
-            auth.requestMatchers("/curvePoint/**").hasRole("USER");
-            auth.requestMatchers("/bidList/**").hasRole("USER");
-            auth.requestMatchers("/secure/**").hasRole("USER");
-            auth.requestMatchers("/rating/**").hasRole("USER");
-            auth.requestMatchers("/ruleName/**").hasRole("USER");
-            auth.requestMatchers("/trade/**").hasRole("USER");
+            auth.requestMatchers("/home/**").hasAnyRole("USER", "ADMIN");
+            auth.requestMatchers("/curvePoint/**").hasAnyRole("USER", "ADMIN");
+            auth.requestMatchers("/bidList/**").hasAnyRole("USER", "ADMIN");
+            auth.requestMatchers("/secure/**").hasAnyRole("USER", "ADMIN");
+            auth.requestMatchers("/rating/**").hasAnyRole("USER", "ADMIN");
+            auth.requestMatchers("/ruleName/**").hasAnyRole("USER", "ADMIN");
+            auth.requestMatchers("/trade/**").hasAnyRole("USER", "ADMIN");
             auth.requestMatchers("/admin/**").hasRole("ADMIN");
             auth.anyRequest().authenticated();
         }).formLogin(Customizer.withDefaults()).build();

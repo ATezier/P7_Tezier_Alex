@@ -1,6 +1,7 @@
 package com.nnk.springboot.domain;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Pattern;
 import lombok.NoArgsConstructor;
 
 import java.sql.Timestamp;
@@ -18,12 +19,16 @@ public class Trade {
     @Column(name = "type")
     String type;
     @Column(name = "buyQuantity")
+    @Pattern(regexp = "[+]?([0-9]*[.])?[0-9]+", message = "The value must be a number")
     Double buyQuantity;
     @Column(name = "sellQuantity")
+    @Pattern(regexp = "[+]?([0-9]*[.])?[0-9]+", message = "The value must be a number")
     Double sellQuantity;
     @Column(name = "buyPrice")
+    @Pattern(regexp = "[+]?([0-9]*[.])?[0-9]+", message = "The value must be a number")
     Double buyPrice;
     @Column(name = "sellPrice")
+    @Pattern(regexp = "[+]?([0-9]*[.])?[0-9]+", message = "The value must be a number")
     Double sellPrice;
     @Column(name = "tradeDate")
     Timestamp tradeDate;

@@ -1,6 +1,7 @@
 package com.nnk.springboot.domain;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Pattern;
 import lombok.NoArgsConstructor;
 
 import java.sql.Timestamp;
@@ -13,12 +14,15 @@ public class CurvePoint {
     @GeneratedValue(strategy= GenerationType.AUTO)
     Integer id;
     @Column(name = "curveId")
+    @Pattern(regexp = "[0-9]+", message = "The value must be a number")
     Integer curveId;
     @Column(name = "asOfDate")
     Timestamp asOfDate;
     @Column(name = "term")
+    @Pattern(regexp = "[+]?([0-9]*[.])?[0-9]+", message = "The value must be a number")
     Double term;
     @Column(name = "value")
+    @Pattern(regexp = "[+]?([0-9]*[.])?[0-9]+", message = "The value must be a number")
     Double value;
     @Column(name = "creationDate")
     Timestamp creationDate;
